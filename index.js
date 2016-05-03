@@ -21,7 +21,7 @@ setInterval(function() {
 
   xray(url, 'title')((err, title) => {
     if (err) {
-      throw new Error(err);
+      logger.error(err);
     } else {
       if (title) {
         logger.info('WE HAVE A TITLE TAG NOW:', title);
