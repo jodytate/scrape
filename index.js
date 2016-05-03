@@ -13,21 +13,25 @@ const logger = new (winston.Logger)({
     })]
 });
 
-const minutes = 5;
+const minutes = 1;
 const theInterval = minutes * 60 * 1000;
 const url = argv.u || 'http://radiohead.com';
 
 setInterval(function() {
 
   xray(url, 'title')((err, title) => {
-    if (title) {
-      logger.info('WE HAVE A TITLE TAG NOW.');
-      notifier.notify({
-        'title': url,
-        'message': 'changed'
-      });
+    if (err) {
+      throw new Error(err);
     } else {
-      logger.info('no changes');
+      if (title) {
+        logger.info('WE HAVE A TITLE TAG NOW:', title);
+        notifier.notify({
+          'title': url,
+          'message': 'changed ' + title
+        });
+      } else {
+        logger.info('no title tag');
+      }
     }
   })
 
